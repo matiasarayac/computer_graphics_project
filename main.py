@@ -4,6 +4,11 @@ from OpenGL.GLUT import *
 
 from PIL.Image import open
 
+import tweepy
+import wget
+
+import twitter
+
 vertices1= [
     (0, 0),
     (100, 0),
@@ -62,7 +67,7 @@ def draw():
 
     draw_square_image(vertices1, "nicolini.jpg")
     draw_square_image(vertices2, "colocolo.jpeg")
-    draw_square_image(vertices3, "mario.jpeg")
+    draw_square_image(vertices3, image)
 
     glutSwapBuffers()
 
@@ -182,6 +187,8 @@ def main():
     init_glut()
 
 
-main()                 
+image = twitter.download_image("#lucilavit")
+
+main()
 
 

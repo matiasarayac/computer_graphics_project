@@ -1,0 +1,6 @@
+twitter_credentials.py
+.DS_Store
+twitter_credentials.pyc
+twitter.pyc
+*.jpg
+*.jpeg
