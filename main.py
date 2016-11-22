@@ -151,6 +151,7 @@ def keyboard(key, x, y):
     print key
     global vertex
     global mode
+    global images
     if key == '1':
         vertex = 1
     elif key == '2':
@@ -179,6 +180,10 @@ def keyboard(key, x, y):
         mode = 1
     elif key == 'y':
         mode = 0
+    elif key == 'p':
+        images = twitter.download_image("#computaciongraficausm")
+        for image in images:
+            print image
 
 def LoadTextures(image):
     #global texture
@@ -204,7 +209,6 @@ def LoadTextures(image):
 
 def main():
     init_glut()
-
 
 images = twitter.download_image("#computaciongraficausm")
 for image in images:
