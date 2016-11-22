@@ -10,7 +10,8 @@ auth.set_access_token(twitter_credentials.ACCESS_TOKEN, twitter_credentials.ACCE
 def download_image(hashtag):
     api = tweepy.API(auth)
     media_files = set()
-    public_tweets = api.search(hashtag, count=5)
+    filesname = []
+    public_tweets = api.search(hashtag, count=2)
     filename = ""
     for tweet in public_tweets:
         print tweet.text
@@ -19,7 +20,6 @@ def download_image(hashtag):
             media_files.add(media[0]["media_url"])
 
     for media_file in media_files:
-        filename = wget.download(media_file)
-        print filename
+        filesname.append(wget.download(media_file))
 
-    return filename
+    return filesname

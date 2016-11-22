@@ -4,9 +4,6 @@ from OpenGL.GLUT import *
 
 from PIL.Image import open
 
-import tweepy
-import wget
-
 import twitter
 
 vertices1= [
@@ -17,7 +14,7 @@ vertices1= [
     ]
 
 color1 = (0,0,1)
-    
+
 vertices2= [
     (150, 0),
     (250, 0),
@@ -48,6 +45,8 @@ width, height = 500, 400
 
 vertex = 1
 
+mode = 0
+
 def refresh2d(width, height):
     glViewport(0, 0, width, height)
     glMatrixMode(GL_PROJECTION)
@@ -60,14 +59,29 @@ def draw():
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()
     refresh2d(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT))
-    
-##    draw_square_color(vertices1, color1)
-##    draw_square_color(vertices2, color2)
-##    draw_square_color(vertices3, color3)
 
-    draw_square_image(vertices1, "nicolini.jpg")
-    draw_square_image(vertices2, "colocolo.jpeg")
-    draw_square_image(vertices3, image)
+    if mode == 0:
+        draw_square_color(vertices1, color1)
+        draw_square_color(vertices2, color2)
+        draw_square_color(vertices3, color3)
+    elif mode == 1:
+        if len(images) > 0:
+            if images[0] == "":
+                draw_square_image(vertices1, "cgusm.jpg")
+            else:
+                draw_square_image(vertices1, images[0])
+        else:
+            draw_square_image(vertices1, "cgusm.jpg")
+
+        if len(images) > 1:
+            if images[1] == "":
+                draw_square_image(vertices2, "cgusm.jpg")
+            else:
+                draw_square_image(vertices2, images[1])
+        else:
+            draw_square_image(vertices2, "cgusm.jpg")
+
+        draw_square_image(vertices3, "cgusm.jpg")
 
     glutSwapBuffers()
 
@@ -89,7 +103,7 @@ def draw_square_color(vertices, color):
 
     glBegin(GL_QUADS)
     for vertex in vertices:
-        glVertex2fv(vertex) 
+        glVertex2fv(vertex)
     glEnd()
 
 def draw_square_image(vertices, image):
@@ -100,8 +114,8 @@ def draw_square_image(vertices, image):
     i = 0
     for vertex in vertices:
         glVertex2fv(vertex); glTexCoord2fv(texture[i])
-        i+=1  
-    glEnd() 
+        i+=1
+    glEnd()
 
 def mouse(button, state, x, y):
     h = glutGet(GLUT_WINDOW_HEIGHT)
@@ -136,6 +150,7 @@ def mouse(button, state, x, y):
 def keyboard(key, x, y):
     print key
     global vertex
+    global mode
     if key == '1':
         vertex = 1
     elif key == '2':
@@ -160,18 +175,22 @@ def keyboard(key, x, y):
         vertex = 11
     elif key == 'f':
         vertex = 12
+    elif key == 't':
+        mode = 1
+    elif key == 'y':
+        mode = 0
 
 def LoadTextures(image):
     #global texture
     image = open(image)
-    
+
     ix = image.size[0]
     iy = image.size[1]
     image = image.tobytes("raw", "RGBX", 0, -1)
-    
-    # Create Texture    
+
+    # Create Texture
     glBindTexture(GL_TEXTURE_2D, glGenTextures(1))   # 2d texture (x and y size)
-    
+
     glPixelStorei(GL_UNPACK_ALIGNMENT,1)
     glTexImage2D(GL_TEXTURE_2D, 0, 3, ix, iy, 0, GL_RGBA, GL_UNSIGNED_BYTE, image)
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP)
@@ -187,8 +206,8 @@ def main():
     init_glut()
 
 
-image = twitter.download_image("#lucilavit")
+images = twitter.download_image("#computaciongraficausm")
+for image in images:
+    print image
 
 main()
-
-
